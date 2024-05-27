@@ -11,3 +11,39 @@ Plan detallado de implementación de la arquitectura de extracción, carga y tra
 5. **Configurar Dataform para Transformación de Datos**
 6. **Configurar Looker Studio para Visualización de Datos**
 
+```css
+terraform_project/
+├── main.tf
+├── outputs.tf
+├── variables.tf
+├── terraform.tfvars
+├── modules/
+│   ├── iam_orchestrator/
+│   │   ├── main.tf
+│   │   ├── outputs.tf
+│   │   └── variables.tf
+│   ├── cloud_scheduler/
+│   │   ├── main.tf
+│   │   ├── outputs.tf
+│   │   └── variables.tf
+│   ├── workflows/
+│   │   ├── main.tf
+│   │   ├── outputs.tf
+│   │   └── variables.tf
+│   ├── connector/
+│   │   ├── main.tf
+│   │   ├── outputs.tf
+│   │   └── variables.tf
+│   ├── bigquery/
+│   │   ├── main.tf
+│   │   ├── outputs.tf
+│   │   └── variables.tf
+│   ├── transformation/
+│   │   ├── main.tf
+│   │   ├── outputs.tf
+│   │   └── variables.tf
+│   └── looker_studio/
+│       ├── main.tf
+│       ├── outputs.tf
+│       └── variables.tf
+```

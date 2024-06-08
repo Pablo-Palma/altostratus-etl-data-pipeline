@@ -1,0 +1,32 @@
+# Archivos de configuración específicos del entorno
+*.env
+credentials.json
+api_key_aemet.txt
+
+# Archivos y directorios generados por Terraform
+.terraform/
+*.tfstate
+*.tfstate.backup
+.terraform.lock.hcl
+
+# Archivos de configuración del entorno de desarrollo
+.idea/
+*.iml
+
+# Archivos temporales y logs
+*.log
+*.tmp
+*.swp
+
+# Archivos comprimidos
+*.zip
+
+# Archivos binarios
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Directorio de entorno virtual de Python
+venv/
+

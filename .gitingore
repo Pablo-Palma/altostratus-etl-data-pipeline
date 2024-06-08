@@ -5,9 +5,12 @@ api_key_aemet.txt
 
 # Archivos y directorios generados por Terraform
 .terraform/
+**/.terraform/
 *.tfstate
 *.tfstate.backup
 .terraform.lock.hcl
+terraform.tfstate
+terraform.tfstate.backup
 
 # Archivos de configuración del entorno de desarrollo
 .idea/
@@ -29,4 +32,11 @@ api_key_aemet.txt
 
 # Directorio de entorno virtual de Python
 venv/
+
+# Archivos temporales de Microsoft Office
+~$*
+
+# Otros archivos específicos del proyecto
+*.docx
+commands.txt
 

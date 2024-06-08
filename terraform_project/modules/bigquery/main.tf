@@ -7,18 +7,21 @@ resource "google_bigquery_dataset" "staging" {
   dataset_id = "staging"
   project    = var.project_id
   location   = "US"
+  delete_contents_on_destroy  = true
 }
 
 resource "google_bigquery_dataset" "processing" {
   dataset_id = "processing"
   project    = var.project_id
   location   = "US"
+  delete_contents_on_destroy  = true
 }
 
 resource "google_bigquery_dataset" "reporting" {
   dataset_id = "reporting"
   project    = var.project_id
   location   = "US"
+  delete_contents_on_destroy  = true
 }
 
 resource "google_bigquery_table" "staging_table" {

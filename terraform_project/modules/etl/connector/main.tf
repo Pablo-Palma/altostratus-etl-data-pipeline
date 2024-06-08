@@ -4,7 +4,7 @@ provider "google" {
 }
 
 module "bigquery" {
-  source     = "../bigquery"
+  source     = "../../bigquery"
   project_id = var.project_id
   region     = var.region
 }

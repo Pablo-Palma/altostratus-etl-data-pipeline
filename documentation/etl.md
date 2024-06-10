@@ -48,3 +48,9 @@ bq head -n 10 altostratus-dataretobootcaamp:reporting.aemet_data_aggregated
 ```
 bq query --use_legacy_sql=false < transformation/transformation.sql
 ```
+
+## Ejecutar Consulta al dataset en reporting desde el terminal
+
+```
+bq query --use_legacy_sql=false 'SELECT * FROM `altostratus-dataretobootcaamp.staging.aemet_data` LIMIT 10'
+```

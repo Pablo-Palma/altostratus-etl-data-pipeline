@@ -42,12 +42,32 @@ def format_data(data):
         })
     return formatted_data
 
+def check_data_exists(client, table_id, date, station):
+    query = f"""
+    SELECT COUNT(*) as count
+    FROM `{table_id}`
+    WHERE Fecha = '{date}' AND Estacion = '{station}'
+    """
+    query_job = client.query(query)
+    results = query_job.result()
+    for row in results:
+        if row.count > 0:
+            return True
+    return False
+
 def load_data_to_bigquery(data):
     client = bigquery.Client()
     table_id = os.getenv('BIGQUERY_TABLE_ID')
-    errors = client.insert_rows_json(table_id, data)
-    if errors:
-        raise Exception(f"Failed to insert rows: {errors}")
+    unique_data = []
+
+    for row in data:
+        if not check_data_exists(client, table_id, row['Fecha'], row['Estacion']):
+            unique_data.append(row)
+
+    if unique_data:
+        errors = client.insert_rows_json(table_id, unique_data)
+        if errors:
+            raise Exception(f"Failed to insert rows: {errors}")
 
 @app.route('/', methods=['POST'])
 def main(request):
@@ -55,13 +75,13 @@ def main(request):
         api_key = os.getenv('API_KEY')
         if not api_key:
             raise Exception("API_KEY not found in environment variables")
-        
+
         # Imprimir la API key para depuración
         print(f"API_KEY: {repr(api_key)}")
-        
+
         # Verificar y limpiar la API key
         api_key = api_key.strip()
-        
+
         start_date = '2024-05-23T00:00:00UTC'
         end_date = '2024-05-24T23:59:59UTC'
         station_id = '3195'  # ID de estación de Madrid - Retiro
@@ -80,3 +100,4 @@ def main(request):
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080)
+

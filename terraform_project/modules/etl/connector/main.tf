@@ -41,6 +41,7 @@ resource "google_cloudfunctions_function" "aemet_connector" {
   environment_variables = {
     API_KEY           = data.google_secret_manager_secret_version.api_key.secret_data
     BIGQUERY_TABLE_ID = "${var.project_id}.${module.bigquery.staging_table_id}"
+    FAILED_REQUESTS_TABLE_ID = "${module.bigquery.failed_requests_table_id}"
   }
 
   trigger_http = true

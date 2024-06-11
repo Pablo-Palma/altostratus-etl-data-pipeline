@@ -48,6 +48,21 @@ resource "google_bigquery_table" "staging_table" {
 EOF
 }
 
+resource "google_bigquery_table" "failed_requests_table" {
+  dataset_id = google_bigquery_dataset.staging.dataset_id
+  table_id   = "failed_requests"
+  project    = var.project_id
+  deletion_protection = false
+
+  schema = <<EOF
+[
+  {"name": "FechaInicio", "type": "STRING", "mode": "REQUIRED"},
+  {"name": "FechaFin", "type": "STRING", "mode": "REQUIRED"},
+  {"name": "Estacion", "type": "STRING", "mode": "REQUIRED"}
+]
+EOF
+}
+
 output "bigquery_datasets" {
   value = ["staging", "processing", "reporting"]
 }
@@ -56,3 +71,6 @@ output "staging_table_id" {
   value = "${google_bigquery_dataset.staging.dataset_id}.${google_bigquery_table.staging_table.table_id}"
 }
 
+output "failed_requests_table_id" {
+  value = "${google_bigquery_dataset.staging.dataset_id}.${google_bigquery_table.failed_requests_table.table_id}"
+}

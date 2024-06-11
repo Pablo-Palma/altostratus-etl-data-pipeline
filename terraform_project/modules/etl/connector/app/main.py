@@ -3,6 +3,7 @@ import requests
 import json
 from google.cloud import bigquery
 from flask import Flask, jsonify, request
+from error_handling import log_failed_requests, retry_failed_requests
 
 app = Flask(__name__)
 
@@ -82,18 +83,34 @@ def main(request):
         # Verificar y limpiar la API key
         api_key = api_key.strip()
 
-        start_date = '2024-05-23T00:00:00UTC'
-        end_date = '2024-05-24T23:59:59UTC'
+        start_date = '2024-05-24T00:00:00UTC'
+        end_date = '2024-05-25T23:59:59UTC'
         station_id = '3195'  # ID de estación de Madrid - Retiro
 
-        data_url = fetch_aemet_data(api_key, start_date, end_date, station_id)
-        if data_url:
-            data = fetch_data_from_url(data_url)
-            formatted_data = format_data(data)
-            load_data_to_bigquery(formatted_data)
-            return jsonify({"message": "Data loaded successfully"}), 200
-        else:
-            return jsonify({"error": "No se pudieron obtener los datos de AEMET"}), 500
+        client = bigquery.Client()
+
+        # Retry failed requests
+        retry_failed_requests(client, api_key, fetch_aemet_data, fetch_data_from_url, format_data, load_data_to_bigquery)
+
+        # Fetch new data
+        try:
+            data_url = fetch_aemet_data(api_key, start_date, end_date, station_id)
+            if data_url:
+                data = fetch_data_from_url(data_url)
+                formatted_data = format_data(data)
+                load_data_to_bigquery(formatted_data)
+                return jsonify({"message": "Data loaded successfully"}), 200
+            else:
+                # Log failed request if data_url is None
+                print("Data URL is None, logging failed request")
+                log_failed_requests(client, start_date, end_date, station_id)
+                return jsonify({"error": "No se pudieron obtener los datos de AEMET"}), 500
+        except Exception as e:
+            # Log failed request on exception
+            print("Exception occurred, logging failed request")
+            log_failed_requests(client, start_date, end_date, station_id)
+            raise e
+
     except Exception as e:
         print(f"Exception: {e}")
         return jsonify({"error": str(e)}), 500

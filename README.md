@@ -255,6 +255,96 @@ El módulo Transformer es crucial para la conversión de datos crudos en informa
 <details>
 <summary><strong>Machine Learning</strong></summary>
 
+# Predictions
+
+### Parámetros Clave en el Modelo de Machine Learning
+
+| **Parámetro**          | **Descripción**                                                                                       | **Valor Utilizado** |
+|------------------------|-------------------------------------------------------------------------------------------------------|---------------------|
+| **Forecast Horizon**   | Define el período hacia el futuro para el cual el modelo realiza predicciones.                        | Después de 7 días   |
+| **Context Window**     | Cantidad de días anteriores usados para predecir un valor futuro, proporcionando contexto histórico.  | 5 días              |
+
+#### Resumen de Parámetros:
+- **Forecast Horizon**: Ajustado para predecir valores hasta 7 días después del último dato disponible, enfocado en una proyección de corto plazo.
+- **Context Window**: Utiliza 5 días de datos anteriores para cada predicción, equilibrando la captura de tendencias recientes sin sobrecargar el modelo con información demasiado antigua.
+
+## Primera predicción
+
+```
+Fecha,Estacion,Provincia,Temperatura_Maxima_C,Temperatura_Minima_C,Humedad_Relativa_Media,Presion_Maxima_hPa,Presion_Minima_hPa,Velocidad_Media_Viento_ms,Racha_Maxima_Viento_ms,Precipitacion_mm,predicted_on_Fecha,Predicted_Temperatura_Media_C
+2024-06-11,"MADRID, RETIRO",MADRID,30.0,20.0,45.0,937.2,933.9,2.5,7.8,0.0,2024-06-11,24.859983444213867
+2024-06-12,"MADRID, RETIRO",MADRID,31.0,21.0,46.0,937.2,933.9,2.5,7.8,0.0,2024-06-11,24.525007247924805
+2024-06-13,"MADRID, RETIRO",MADRID,32.0,22.0,47.0,937.2,933.9,2.5,7.8,0.0,2024-06-11,24.2839412689209
+2024-06-14,"MADRID, RETIRO",MADRID,33.0,23.0,48.0,937.2,933.9,2.5,7.8,0.0,2024-06-11,24.024276733398438
+2024-06-15,"MADRID, RETIRO",MADRID,34.0,24.0,49.0,937.2,933.9,2.5,7.8,0.0,2024-06-11,24.142459869384766
+2024-06-16,"MADRID, RETIRO",MADRID,35.0,25.0,50.0,937.2,933.9,2.5,7.8,0.0,2024-06-11,24.18337059020996
+2024-06-17,"MADRID, RETIRO",MADRID,36.0,26.0,51.0,937.2,933.9,2.5,7.8,0.0,2024-06-11,24.358701705932617
+```
+
+## Segunda prediccion
+```
+"2024-06-11","MADRID","30.0","20.0","0.0","45.0","937.2","933.9","2.5","7.8",16.91298484802246
+"2024-06-12","MADRID","31.0","21.0","0.0","46.0","937.2","933.9","2.5","7.8",16.82161521911621
+"2024-06-13","MADRID","32.0","22.0","0.0","47.0","937.2","933.9","2.5","7.8",16.551820755004883
+"2024-06-14","MADRID","33.0","23.0","0.0","48.0","937.2","933.9","2.5","7.8",16.6556396484375
+"2024-06-15","MADRID","34.0","24.0","0.0","49.0","937.2","933.9","2.5","7.8",16.755218505859375
+"2024-06-16","MADRID","35.0","25.0","0.0","50.0","937.2","933.9","2.5","7.8",16.822126388549805
+"2024-06-17","MADRID","36.0","26.0","0.0","51.0","937.2","933.9","2.5","7.8",16.743627548217773
+```
+
+## Analisis
+
+Entre Ambas predicciones amplio considerablemente el número de datos, para la primera entrené el modelo **AutoML** con los datos de cada estación(una por comunidad autónoma), recogidos durante un mes(30 días), (52 * 30 == 1560 dias), mientras que el segundo modelo lo entrené con los datos recogidos en un año entero (52 * 365 == 18980).
+
+Además el tiempo de entrenamiento fué incrementado al doble entre ambas pruebas, siendo la segunda de 2 horas y media.
+
+### Parámetros Clave en el Modelo de Machine Learning
+
+| **Parámetro**          | **Descripción**                                                                                       | **Valor Utilizado** |
+|------------------------|-------------------------------------------------------------------------------------------------------|---------------------|
+| **Forecast Horizon**   | Define el período hacia el futuro para el cual el modelo realiza predicciones.                        | Después de 7 días   |
+| **Context Window**     | Cantidad de días anteriores usados para predecir un valor futuro, proporcionando contexto histórico.  | 5 días              |
+
+#### Resumen de Parámetros:
+- **Forecast Horizon**: Ajustado para predecir valores hasta 7 días después del último dato disponible, enfocado en una proyección de corto plazo.
+- **Context Window**: Utiliza 5 días de datos anteriores para cada predicción, equilibrando la captura de tendencias recientes sin sobrecargar el modelo con información demasiado antigua.
+
+### Modelo de ayer
+- **MAE (Error Absoluto Medio)**: 4.296
+- **MAPE (Error Porcentual Absoluto Medio)**: 391,988,900 (extremadamente alto)
+- **RMSE (Error Cuadrático Medio Raíz)**: 5.187
+- **RMSLE (Error Logarítmico Cuadrático Medio Raíz)**: 0.559
+- **R² (Coeficiente de Determinación)**: 0.301
+
+### Modelo de hoy
+- **MAE**: 3.25
+- **MAPE**: 64,606,156 (todavía muy alto pero mucho menor que el modelo anterior)
+- **RMSE**: 4.206
+- **RMSLE**: 0.343
+- **R²**: 0.571
+- **RMSPE (Error Porcentual Cuadrático Medio Raíz)**: 1,027,265,200 (muy alto)
+- **WAPE (Error Porcentual Absoluto Ponderado)**: 19.869
+
+### Análisis y Comparación
+
+1. **MAE y RMSE**:
+   - El MAE y RMSE son más bajos en el modelo de hoy, lo que indica que, en promedio, los errores en las predicciones son menores en magnitud comparado con el modelo de ayer.
+
+2. **MAPE y RMSPE**:
+   - Ambos modelos presentan valores extremadamente altos para MAPE y RMSPE, lo que sugiere que hay problemas en algunos casos específicos donde los errores porcentuales son muy grandes. Esto podría ser debido a valores reales muy pequeños o cercanos a cero, lo cual hace que cualquier error pequeño en la predicción se amplifique en términos porcentuales.
+
+3. **RMSLE**:
+   - El RMSLE es más bajo en el modelo de hoy, indicando que este modelo maneja mejor los errores en una escala logarítmica, lo cual es útil cuando los valores varían en órdenes de magnitud.
+
+4. **R²**:
+   - El valor de R² es sustancialmente mayor en el modelo de hoy (0.571 frente a 0.301), lo que sugiere que este modelo puede explicar una mayor proporción de la varianza de los datos observados, lo que lo hace más fiable.
+
+5. **WAPE**:
+   - WAPE solo está disponible para el modelo de hoy y es relativamente alto (19.869), lo que indica que el error medio ponderado es casi el 20% del valor real promedio.
+
+### Conclusión
+
+El **modelo de hoy es más fiable** en términos generales, ya que todas las métricas clave de error (MAE, RMSE, RMSLE) son más bajas, y su R² es mucho más alto, lo que significa que el modelo de hoy tiene una mejor capacidad general para predecir los datos. Sin embargo, ambos modelos sufren de altos errores porcentuales (MAPE, RMSPE), lo que puede necesitar una revisión de cómo los datos son manejados o transformados antes de la predicción, o podría indicar que el modelo necesita ser ajustado para manejar mejor casos con valores pequeños o cero.
 
 </details>
 

@@ -283,20 +283,22 @@ Fecha,Estacion,Provincia,Temperatura_Maxima_C,Temperatura_Minima_C,Humedad_Relat
 
 ## Segunda prediccion
 ```
-"2024-06-11","MADRID","30.0","20.0","0.0","45.0","937.2","933.9","2.5","7.8",16.91298484802246
-"2024-06-12","MADRID","31.0","21.0","0.0","46.0","937.2","933.9","2.5","7.8",16.82161521911621
-"2024-06-13","MADRID","32.0","22.0","0.0","47.0","937.2","933.9","2.5","7.8",16.551820755004883
-"2024-06-14","MADRID","33.0","23.0","0.0","48.0","937.2","933.9","2.5","7.8",16.6556396484375
-"2024-06-15","MADRID","34.0","24.0","0.0","49.0","937.2","933.9","2.5","7.8",16.755218505859375
-"2024-06-16","MADRID","35.0","25.0","0.0","50.0","937.2","933.9","2.5","7.8",16.822126388549805
-"2024-06-17","MADRID","36.0","26.0","0.0","51.0","937.2","933.9","2.5","7.8",16.743627548217773
+"2024-06-11","MADRID","30.0","20.0","0.0","45.0","937.2","933.9","2.5","7.8",22.91298484802246
+"2024-06-12","MADRID","31.0","21.0","0.0","46.0","937.2","933.9","2.5","7.8",22.82161521911621
+"2024-06-13","MADRID","32.0","22.0","0.0","47.0","937.2","933.9","2.5","7.8",22.551820755004883
+"2024-06-14","MADRID","33.0","23.0","0.0","48.0","937.2","933.9","2.5","7.8",22.6556396484375
+"2024-06-15","MADRID","34.0","24.0","0.0","49.0","937.2","933.9","2.5","7.8",22.755218505859375
+"2024-06-16","MADRID","35.0","25.0","0.0","50.0","937.2","933.9","2.5","7.8",22.822126388549805
+"2024-06-17","MADRID","36.0","26.0","0.0","51.0","937.2","933.9","2.5","7.8",22.743627548217773
 ```
 
 ## Analisis
 
-Entre Ambas predicciones amplio considerablemente el número de datos, para la primera entrené el modelo **AutoML** con los datos de cada estación(una por comunidad autónoma), recogidos durante un mes(30 días), (52 * 30 == 1560 dias), mientras que el segundo modelo lo entrené con los datos recogidos en un año entero (52 * 365 == 18980).
+### Mejoras para el segundo modelo
 
-Además el tiempo de entrenamiento fué incrementado al doble entre ambas pruebas, siendo la segunda de 2 horas y media.
+- **Ampliación de Datos**: El segundo modelo se benefició de un conjunto de datos mucho más amplio, aprovechando observaciones de un año entero por cada estación. Esto proporcionó una base más robusta para el entrenamiento, permitiendo al modelo captar mejor las variabilidades y tendencias a largo plazo.
+- **Tiempo de Entrenamiento**: Al duplicar el tiempo de entrenamiento en el segundo modelo, se permitió un análisis más profundo de los datos más extensos, potencialmente mejorando la capacidad del modelo para hacer predicciones precisas.
+- **Tratamiento de Valores Nulos**: Optar por la mediana en lugar de la media para reemplazar los valores nulos en las precipitaciones asegura que el modelo no se vea afectado por valores atípicamente altos o bajos, manteniendo una aproximación más realista y representativa de las condiciones climáticas típicas.
 
 ### Parámetros Clave en el Modelo de Machine Learning
 

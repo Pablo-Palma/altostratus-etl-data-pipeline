@@ -20,7 +20,7 @@
 
 ### Verificación de los Datos
 
-El comando que has usado (`bq head -n 10 altostratus-dataretobootcaamp:reporting.aemet_data_aggregated`) muestra que los datos en `reporting` están bien formateados y contienen las métricas agregadas necesarias:
+El comando (`bq head -n 10 altostratus-dataretobootcaamp:reporting.aemet_data_aggregated`) muestra que los datos en `reporting` están bien formateados y contienen las métricas agregadas necesarias:
 
 ```sh
 bq head -n 10 altostratus-dataretobootcaamp:reporting.aemet_data_aggregated

@@ -63,7 +63,7 @@ terraform_project/
 ```
 
 
-### Pasos para Implementar la Arquitectura ELT
+## Pasos para Implementar la Arquitectura ELT
 
 
 <details>
@@ -91,8 +91,10 @@ terraform_project/
 
 </details>
 
+## Connector
+
 <details>
-<summary><strong>Connector</strong></summary>
+<summary><strong>Idempotence</strong></summary>
     
 ### Idempotencia
 La idempotencia es un principio de diseño que asegura que múltiples invocaciones de una operación bajo las mismas condiciones producen el mismo resultado sin efectos adicionales. En el contexto de un conector ETL, asegura que al ejecutarse repetidas veces, el proceso no generará datos duplicados, incluso si se invoca varias veces el mismo día.
@@ -141,13 +143,56 @@ El conector está diseñado para ser idempotente. Esto se logra mediante una ser
 Implementar la idempotencia en el conector ofrece múltiples beneficios, incluyendo:
 - **Consistencia de Datos**: Asegura que los datos sean consistentes y confiables, libres de duplicaciones no deseadas.
 - **Robustez Operativa**: Mejora la robustez del sistema al manejar fallos y reinvocaciones sin introducir anomalías en los datos.
-- **Optimización de Recursos**: Reduce el uso innecesario de recursos al evitar procesar y almacenar datos que ya están presentes.   
+- **Optimización de Recursos**: Reduce el uso innecesario de recursos al evitar procesar y almacenar datos que ya están presentes.
+  
 </details>
 
 
 <details>
-<summary><strong>Transformer</strong></summary>
+<summary><strong>Self Healingr</strong></summary>
 
+# Self Healing
+
+La auto-reparación en nuestro conector de Altostratus asegura que si ocurre alguna interrupción en la disponibilidad de la API de AEMET, como un período de inactividad de dos semanas, el sistema automáticamente recupera y carga los datos perdidos una vez que la API vuelve a estar disponible.
+
+#### Mecanismo de Auto-Reparación:
+
+1. **Registro de Solicitudes Fallidas:**
+   - Si una solicitud a la API falla, el incidente se registra en una tabla específica (`FAILED_REQUESTS_TABLE`) con detalles como la fecha de inicio, la fecha de fin y el código de la estación.
+   ```python
+   def log_failed_requests(client, start_date, end_date, station_id):
+       table_id = os.getenv('FAILED_REQUESTS_TABLE_ID')
+       row = {"FechaInicio": start_date, "FechaFin": end_date, "Estacion": station_id}
+       client.insert_rows_json(table_id, [row])
+   ```
+
+2. **Reintento de Cargas Fallidas:**
+   - Regularmente se revisa la tabla de solicitudes fallidas para intentar nuevamente cargar los datos. Si la API vuelve a estar disponible y los datos pueden ser recuperados, se procesan y cargan en BigQuery.
+   ```python
+   def retry_failed_requests(client, api_key):
+       table_id = os.getenv('FAILED_REQUESTS_TABLE_ID')
+       failed_requests = client.query(f"SELECT * FROM `{table_id}`").result()
+       for request in failed_requests:
+           data_url = fetch_aemet_data(api_key, request.FechaInicio, request.FechaFin, request.Estacion)
+           if data_url:
+               data = fetch_data_from_url(data_url)
+               load_data_to_bigquery(data)
+               delete_failed_request(client, request.FechaInicio, request.FechaFin, request.Estacion)
+   ```
+
+3. **Limpieza de Registros de Fallos:**
+   - Después de una carga exitosa, las entradas correspondientes en la tabla de solicitudes fallidas se eliminan para evitar reintento innecesarios y mantener la tabla limpia.
+   ```python
+   def delete_failed_request(client, start_date, end_date, station_id):
+       table_id = os.getenv('FAILED_REQUESTS_TABLE_ID')
+       client.query(f"DELETE FROM `{table_id}` WHERE FechaInicio = '{start_date}' AND FechaFin = '{end_date}' AND Estacion = '{station_id}'")
+   ```
+
+#### Beneficios:
+
+- **Continuidad y Completitud de Datos**: Asegura que todos los datos necesarios sean recuperados y cargados, manteniendo la integridad y completitud del conjunto de datos.
+- **Resiliencia Operativa**: Aumenta la capacidad del sistema para manejar interrupciones sin intervención humana, mejorando la fiabilidad del proceso ETL.
+- **Eficiencia en la Gestión de Datos**: Optimiza el manejo de datos y recursos al automatizar la recuperación de datos tras fallos de conexión con la fuente.
 
 </details>
 

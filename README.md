@@ -7,6 +7,18 @@ Plan detallado de implementación de la arquitectura de extracción, carga y tra
 ### Descripción General
 Este proyecto de Terraform está diseñado para automatizar el despliegue y la gestión de recursos en Google Cloud Platform para procesos ETL y otras tareas relacionadas con la gestión de datos. Incluye módulos para la creación de recursos de BigQuery, Cloud Scheduler, y funciones de Cloud, entre otros.
 
+### Scope
+
+| **Propiedad**   | **Detalle**                                                                                    |
+|-----------------|------------------------------------------------------------------------------------------------|
+| **API**         | AEMET OpenData                                                                                 |
+| **URL Base**    | [opendata.aemet.es](https://opendata.aemet.es/dist/index.html#/informacion-satelite)           |
+| **Endpoint**    | `/api/valores/climatologicos/diarios/datos/fechaini/{fechaIniStr}/fechafin/{fechaFinStr}/estacion/{idema}` |
+| **Descripción** | Extrae datos climatológicos diarios de todas las estaciones para un rango de fechas específico.|
+| **Método**      | GET                                                                                            |
+| **Parámetros**  | `fechaIniStr`, `fechaFinStr`: Fecha de inicio y fin en formato YYYY-MM-DD.<br>`idema`: Código de la estación meteorológica. |
+| **Uso**         | Utilizado en el Connector para extraer datos necesarios para procesamiento en Staging.         |
+
 ### Recursos de GCP Utilizados
 
 | Recurso GCP       | Descripción                                                | Módulo Asociado    |
@@ -17,13 +29,6 @@ Este proyecto de Terraform está diseñado para automatizar el despliegue y la g
 | Cloud Storage     | Almacena los archivos necesarios para las funciones de Cloud, como el código fuente y los archivos de configuración. | `etl/connector/app`|
 | Cloud Run         | Escalable y sin servidor para contenedores.                | No especificado    |
 
-### Flujo de Trabajo del Script `run_etl.sh`
-1. Cambia al directorio `etl/connector` y ejecuta `terraform apply` para desplegar la función de Cloud.
-2. Captura la URL de la función de Cloud y la utiliza para hacer solicitudes HTTP.
-3. Cambia al directorio `etl/transformation` y ejecuta `terraform apply`.
-4. Hace solicitudes curl a la función de Cloud hasta que se reciba una respuesta exitosa.
-5. Ejecuta una consulta SQL en BigQuery.
-6. Actualiza Cloud Scheduler con la nueva URL de la función usando Terraform.
 
 ## GCP Architecture
 

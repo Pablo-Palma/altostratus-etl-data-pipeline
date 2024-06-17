@@ -1,5 +1,6 @@
-## AFTER
-  1 ## AFTER
+## After
+
+```
 PPR$ bq query --use_legacy_sql=false 'SELECT * FROM `altostratus-dataretobootcaamp.staging.aemet_data`'
 +------------+----------------+-----------+---------------------+----------------------+----------------------+------------------+------------------------+--------------------+--------------------+---------------------------+------------------------+
 |   Fecha    |    Estacion    | Provincia | Temperatura_Media_C | Temperatura_Maxima_C | Temperatura_Minima_C | Precipitacion_mm | Humedad_Relativa_Media | Presion_Maxima_hPa | Presion_Minima_hPa | Velocidad_Media_Viento_ms | Racha_Maxima_Viento_ms |
@@ -19,9 +20,11 @@ PPR$ bq query --use_legacy_sql=false 'SELECT * FROM `altostratus-dataretobootcaa
 | 2024-05-23 | MADRID, RETIRO | MADRID    |                18.5 |                 25.4 |                 11.6 |              0.0 |                   36.0 |              940.9 |              936.9 |                       1.4 |                    8.6 |
 | 2024-05-24 | MADRID, RETIRO | MADRID    |                20.0 |                 27.6 |                 12.5 |              0.0 |                   38.0 |              939.5 |              936.6 |                       1.9 |                    9.4 |
 +------------+----------------+-----------+---------------------+----------------------+----------------------+------------------+------------------------+--------------------+--------------------+---------------------------+------------------------+
+```
 
-## BEFORE
+## Before
 
+```
 PPR$ bq query --use_legacy_sql=false 'SELECT * FROM `altostratus-dataretobootcaamp.staging.aemet_data`'
 +------------+----------------+-----------+---------------------+----------------------+----------------------+------------------+------------------------+--------------------+--------------------+---------------------------+------------------------+
 |   Fecha    |    Estacion    | Provincia | Temperatura_Media_C | Temperatura_Maxima_C | Temperatura_Minima_C | Precipitacion_mm | Humedad_Relativa_Media | Presion_Maxima_hPa | Presion_Minima_hPa | Velocidad_Media_Viento_ms | Racha_Maxima_Viento_ms |
@@ -41,4 +44,4 @@ PPR$ bq query --use_legacy_sql=false 'SELECT * FROM `altostratus-dataretobootcaa
 | 2024-05-23 | MADRID, RETIRO | MADRID    |                18.5 |                 25.4 |                 11.6 |              0.0 |                   36.0 |              940.9 |              936.9 |                       1.4 |                    8.6 |
 | 2024-05-24 | MADRID, RETIRO | MADRID    |                20.0 |                 27.6 |                 12.5 |              0.0 |                   38.0 |              939.5 |              936.6 |                       1.9 |                    9.4 |
 +------------+----------------+-----------+---------------------+----------------------+----------------------+------------------+------------------------+--------------------+--------------------+---------------------------+------------------------+
-PPR$
+```

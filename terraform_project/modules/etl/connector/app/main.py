@@ -3,6 +3,8 @@ import requests
 import json
 from google.cloud import bigquery
 from flask import Flask, jsonify
+from datetime import datetime, timedelta
+import pytz
 
 app = Flask(__name__)
 
@@ -82,8 +84,10 @@ def main(request):
         # Verificar y limpiar la API key
         api_key = api_key.strip()
 
-        start_date = '2024-06-12T00:00:00UTC'
-        end_date = '2024-06-12T23:59:59UTC'
+        timezone = pytz.timezone('UTC')
+        specific_day = datetime.now(tz=timezone) - timedelta(days=5)
+        start_date = specific_day.strftime('%Y-%m-%dT00:00:00UTC')  # Comienzo del día específico
+        end_date = specific_day.strftime('%Y-%m-%dT23:59:59UTC') 
         station_ids = [
             'B087X', 'B341X', 'C018J', 'C101A', '0061X', '0281Y', '1010X', '3195',
             '1060X', '1083L', '1179B', '1297E', '1351', '1541B', '1583X', '2030', '2106B',

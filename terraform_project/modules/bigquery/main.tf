@@ -54,15 +54,6 @@ resource "google_bigquery_table" "staging_table" {
   schema = var.schema
 }
 
-resource "google_bigquery_table" "ml_table" {
-  dataset_id = google_bigquery_dataset.staging.dataset_id
-  table_id   = "ml_data"
-  project    = var.project_id
-  deletion_protection = false
-
-  schema = var.schema
-}
-
 resource "google_bigquery_table" "failed_requests_table" {
   dataset_id = google_bigquery_dataset.staging.dataset_id
   table_id   = "failed_requests"
@@ -84,10 +75,6 @@ output "bigquery_datasets" {
 
 output "staging_table_id" {
   value = "${google_bigquery_dataset.staging.dataset_id}.${google_bigquery_table.staging_table.table_id}"
-}
-
-output "ml_table_id" {
-  value = "${google_bigquery_dataset.staging.dataset_id}.${google_bigquery_table.ml_table.table_id}"
 }
 
 output "failed_requests_table_id" {

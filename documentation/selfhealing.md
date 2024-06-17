@@ -13,6 +13,7 @@ PPR$ bq query --use_legacy_sql=false 'SELECT * FROM `altostratus-dataretobootcaa
 | 2024-05-25 | MADRID, RETIRO | MADRID    |                21.5 |                 29.2 |                 13.8 |              0.0 |                   27.0 |              940.3 |              937.8 |                       3.1 |                   13.3 |
 +------------+----------------+-----------+---------------------+----------------------+----------------------+------------------+------------------------+--------------------+--------------------+---------------------------+------------------------+
 ```
+
 ## 2. Simulamos un fallo en la conexión añadiendo un caracter al url.
 
 Observamos que se almacena en nuestro dataset "failed_request".
@@ -28,6 +29,7 @@ PPR$ bq query --use_legacy_sql=false 'SELECT * FROM `altostratus-dataretobootcaa
 +------------------------+------------------------+----------+
 ```
 
+```
 PPR$ bq query --use_legacy_sql=false 'SELECT * FROM `altostratus-dataretobootcaamp.staging.aemet_data`'
 +------------+----------------+-----------+---------------------+----------------------+----------------------+------------------+------------------------+--------------------+--------------------+---------------------------+------------------------+
 |   Fecha    |    Estacion    | Provincia | Temperatura_Media_C | Temperatura_Maxima_C | Temperatura_Minima_C | Precipitacion_mm | Humedad_Relativa_Media | Presion_Maxima_hPa | Presion_Minima_hPa | Velocidad_Media_Viento_ms | Racha_Maxima_Viento_ms |
@@ -35,7 +37,7 @@ PPR$ bq query --use_legacy_sql=false 'SELECT * FROM `altostratus-dataretobootcaa
 | 2024-05-24 | MADRID, RETIRO | MADRID    |                20.0 |                 27.6 |                 12.5 |              0.0 |                   38.0 |              939.5 |              936.6 |                       1.9 |                    9.4 |
 | 2024-05-25 | MADRID, RETIRO | MADRID    |                21.5 |                 29.2 |                 13.8 |              0.0 |                   27.0 |              940.3 |              937.8 |                       3.1 |                   13.3 |
 +------------+----------------+-----------+---------------------+----------------------+----------------------+------------------+------------------------+--------------------+--------------------+---------------------------+------------------------+
-
+```
 ## 3. Recomponemos la url para simular la recuperación de la web aemet, y comprobar que automáticamente se recupera la carga.
 
 ```

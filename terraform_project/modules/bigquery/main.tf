@@ -24,13 +24,10 @@ resource "google_bigquery_dataset" "reporting" {
   delete_contents_on_destroy  = true
 }
 
-resource "google_bigquery_table" "staging_table" {
-  dataset_id = google_bigquery_dataset.staging.dataset_id
-  table_id   = "aemet_data"
-  project    = var.project_id
-  deletion_protection = false
-
-  schema = <<EOF
+variable "schema" {
+  description = "Schema for BigQuery tables"
+  type        = string
+  default     = <<EOF
 [
   {"name": "Fecha", "type": "STRING", "mode": "REQUIRED"},
   {"name": "Estacion", "type": "STRING", "mode": "NULLABLE"},
@@ -46,6 +43,24 @@ resource "google_bigquery_table" "staging_table" {
   {"name": "Racha_Maxima_Viento_ms", "type": "FLOAT", "mode": "NULLABLE"}
 ]
 EOF
+}
+
+resource "google_bigquery_table" "staging_table" {
+  dataset_id = google_bigquery_dataset.staging.dataset_id
+  table_id   = "aemet_data"
+  project    = var.project_id
+  deletion_protection = false
+
+  schema = var.schema
+}
+
+resource "google_bigquery_table" "ml_table" {
+  dataset_id = google_bigquery_dataset.staging.dataset_id
+  table_id   = "ml_data"
+  project    = var.project_id
+  deletion_protection = false
+
+  schema = var.schema
 }
 
 resource "google_bigquery_table" "failed_requests_table" {
@@ -71,6 +86,11 @@ output "staging_table_id" {
   value = "${google_bigquery_dataset.staging.dataset_id}.${google_bigquery_table.staging_table.table_id}"
 }
 
+output "ml_table_id" {
+  value = "${google_bigquery_dataset.staging.dataset_id}.${google_bigquery_table.ml_table.table_id}"
+}
+
 output "failed_requests_table_id" {
   value = "${google_bigquery_dataset.staging.dataset_id}.${google_bigquery_table.failed_requests_table.table_id}"
 }
+

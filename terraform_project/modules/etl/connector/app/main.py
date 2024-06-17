@@ -2,8 +2,7 @@ import os
 import requests
 import json
 from google.cloud import bigquery
-from flask import Flask, jsonify, request
-from error_handling import log_failed_requests, retry_failed_requests
+from flask import Flask, jsonify
 
 app = Flask(__name__)
 
@@ -83,33 +82,45 @@ def main(request):
         # Verificar y limpiar la API key
         api_key = api_key.strip()
 
-        start_date = '2024-05-24T00:00:00UTC'
-        end_date = '2024-05-25T23:59:59UTC'
-        station_id = '3195'  # ID de estación de Madrid - Retiro
+        start_date = '2024-06-12T00:00:00UTC'
+        end_date = '2024-06-12T23:59:59UTC'
+        station_ids = [
+            'B087X', 'B341X', 'C018J', 'C101A', '0061X', '0281Y', '1010X', '3195',
+            '1060X', '1083L', '1179B', '1297E', '1351', '1541B', '1583X', '2030', '2106B',
+            '2135A', '2166Y', '2235U', '2430Y', '2462'
+        ]
 
         client = bigquery.Client()
 
-        # Retry failed requests
-        retry_failed_requests(client, api_key, fetch_aemet_data, fetch_data_from_url, format_data, load_data_to_bigquery)
+        all_data = []
+        failed_stations = []
 
-        # Fetch new data
-        try:
-            data_url = fetch_aemet_data(api_key, start_date, end_date, station_id)
-            if data_url:
-                data = fetch_data_from_url(data_url)
-                formatted_data = format_data(data)
-                load_data_to_bigquery(formatted_data)
-                return jsonify({"message": "Data loaded successfully"}), 200
-            else:
-                # Log failed request if data_url is None
-                print("Data URL is None, logging failed request")
-                log_failed_requests(client, start_date, end_date, station_id)
-                return jsonify({"error": "No se pudieron obtener los datos de AEMET"}), 500
-        except Exception as e:
-            # Log failed request on exception
-            print("Exception occurred, logging failed request")
-            log_failed_requests(client, start_date, end_date, station_id)
-            raise e
+        for station_id in station_ids:
+            try:
+                data_url = fetch_aemet_data(api_key, start_date, end_date, station_id)
+                if data_url:
+                    data = fetch_data_from_url(data_url)
+                    formatted_data = format_data(data)
+                    all_data.extend(formatted_data)
+                else:
+                    # Log failed request if data_url is None
+                    print(f"Data URL is None for station {station_id}, logging failed request")
+                    failed_stations.append(station_id)
+            except requests.exceptions.RequestException as e:
+                # Log failed request on exception
+                print(f"Exception occurred for station {station_id}, logging failed request: {e}")
+                failed_stations.append(station_id)
+
+        if all_data:
+            load_data_to_bigquery(all_data)
+            message = {"message": "Data loaded successfully"}
+        else:
+            message = {"error": "No se pudieron obtener los datos de AEMET"}
+
+        if failed_stations:
+            message["failed_stations"] = failed_stations
+
+        return jsonify(message), 200 if all_data else 500
 
     except Exception as e:
         print(f"Exception: {e}")

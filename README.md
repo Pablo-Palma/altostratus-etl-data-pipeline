@@ -149,7 +149,7 @@ Implementar la idempotencia en el conector ofrece múltiples beneficios, incluye
 
 
 <details>
-<summary><strong>Self Healingr</strong></summary>
+<summary><strong>Self Healing</strong></summary>
 
 # Self Healing
 

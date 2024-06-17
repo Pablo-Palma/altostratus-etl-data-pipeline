@@ -68,21 +68,20 @@ terraform_project/
 </details>
 
 <details>
-<summary><strong>Idempotent</strong></summary>
-
-
-</details>
-
-
-<details>
-<summary><strong>Self Healing</strong></summary>
-
-
+<summary><strong>Connector</strong></summary>
+    
 </details>
 
 
 <details>
 <summary><strong>Transformer</strong></summary>
+
+
+</details>
+
+
+<details>
+<summary><strong>Loader</strong></summary>
 
 
 </details>

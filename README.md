@@ -2,7 +2,7 @@
 
 Plan detallado de implementación de la arquitectura de extracción, carga y transformación (ELT) desde la API de AEMET.
 
-![Visualización del Proyecto](documentation/images/altostratus-data-prj-dashboard.png)
+![Dashboard Visualization](documentation/images/altostratus-data-prj-dashboard.png)
 
 
 
@@ -15,6 +15,11 @@ Plan detallado de implementación de la arquitectura de extracción, carga y tra
 5. **Configurar Dataform para Transformación de Datos**
 6. **Configurar Looker Studio para Visualización de Datos**
 
+## GCP Architecture
+
+![subject](documentation/images/gcp_structure.png)
+
+## Project Structure
 
 ```css
 terraform_project/

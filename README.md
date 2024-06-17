@@ -1,7 +1,10 @@
-# Altostratus_Data-Reto_Bootcamp_42
-![Visualización del Proyecto](documentation/images/altostratus-data-etl-dashboard.png)
+# Altostratus ETL Data Pipeline
 
 Plan detallado de implementación de la arquitectura de extracción, carga y transformación (ELT) desde la API de AEMET.
+
+![Visualización del Proyecto](documentation/images/altostratus-data-prj-dashboard.png)
+
+
 
 ### Pasos para Implementar la Arquitectura ELT
 

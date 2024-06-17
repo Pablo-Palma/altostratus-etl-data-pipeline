@@ -198,8 +198,56 @@ La auto-reparación en nuestro conector de Altostratus asegura que si ocurre alg
 
 
 <details>
-<summary><strong>Loader</strong></summary>
+<summary><strong>Transformer</strong></summary>
 
+### Descripción del Transformer
+
+El módulo Transformer es crucial para la conversión de datos crudos en información agregada y limpia que se almacena para el análisis y reporte final. Este proceso se realiza mediante scripts SQL que manipulan y transforman datos almacenados en BigQuery, siguiendo un flujo detallado y estructurado de operaciones.
+
+#### Proceso de Transformación Detallado:
+
+1. **Eliminación de Duplicados:**
+   - Primero, se crea una vista en BigQuery que elimina los duplicados de los datos recopilados, garantizando que cada registro en el dataset `staging` sea único. Esto se logra utilizando la cláusula `SELECT DISTINCT`.
+   ```sql
+   CREATE OR REPLACE VIEW processing.aemet_data_clean_view AS
+   SELECT DISTINCT *
+   FROM staging.aemet_data;
+   ```
+
+2. **Validación y Limpieza de Datos:**
+   - A continuación, se aplica una segunda vista para validar y limpiar los datos. Esta vista filtra los registros para asegurarse de que todos los campos críticos contengan valores válidos y no nulos, como temperaturas y precipitaciones.
+   ```sql
+   CREATE OR REPLACE VIEW processing.aemet_data_clean_validated_view AS
+   SELECT *
+   FROM processing.aemet_data_clean_view
+   WHERE Temperatura_Media_C IS NOT NULL
+     AND Temperatura_Maxima_C IS NOT NULL
+     AND Temperatura_Minima_C IS NOT NULL;
+   ```
+
+3. **Agregación y Cálculo:**
+   - Finalmente, se realiza una transformación que agrega los datos por provincia y fecha, calculando promedios y totales para varias métricas climáticas. Esta transformación se almacena como una tabla en el dataset `reporting`.
+   ```sql
+   CREATE OR REPLACE TABLE reporting.aemet_data_aggregated AS
+   SELECT Provincia, Fecha,
+          AVG(Temperatura_Media_C) AS Avg_Temperatura_Media_C,
+          AVG(Temperatura_Maxima_C) AS Avg_Temperatura_Maxima_C,
+          AVG(Temperatura_Minima_C) AS Avg_Temperatura_Minima_C,
+          SUM(Precipitacion_mm) AS Total_Precipitacion_mm,
+          AVG(Humedad_Relativa_Media) AS Avg_Humedad_Relativa_Media,
+          AVG(Presion_Maxima_hPa) AS Avg_Presion_Maxima_hPa,
+          AVG(Presion_Minima_hPa) AS Avg_Presion_Minima_hPa,
+          AVG(Velocidad_Media_Viento_ms) AS Avg_Velocidad_Media_Viento_ms,
+          MAX(Racha_Maxima_Viento_ms) AS Max_Racha_Maxima_Viento_ms
+   FROM processing.aemet_data_clean_validated_view
+   GROUP BY Provincia, Fecha;
+   ```
+
+#### Características Clave del Transformer:
+
+- **Automatización de Limpieza y Validación:** Asegura la calidad y la confiabilidad de los datos que fluyen hacia los sistemas de reporting y análisis.
+- **Eficiencia de Consultas:** Al almacenar vistas intermedias y tablas, se minimiza el costo computacional de futuras consultas y análisis, permitiendo un acceso más rápido y eficiente a los datos.
+- **Facilidad de Mantenimiento:** Mantener el código SQL en archivos separados y bien documentados facilita su revisión y actualización.
 
 </details>
 

@@ -372,7 +372,7 @@ El dashboard en Looker Studio visualiza datos de clima procesados y almacenados 
 
 </details>
 
-### thanks
+## thanks
 
 Agradecimientos al equipo de Altostratus por poner a nuestra disposicion los conceptos y herramientas necesarias para llevar a cabo este proyecto.
 

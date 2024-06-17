@@ -1,4 +1,5 @@
 # Altostratus_Data-Reto_Bootcamp_42
+![Visualización del Proyecto](documentation/images/altostratus-data-etl-dashboard.png)
 
 Plan detallado de implementación de la arquitectura de extracción, carga y transformación (ELT) desde la API de AEMET.
 
@@ -11,39 +12,29 @@ Plan detallado de implementación de la arquitectura de extracción, carga y tra
 5. **Configurar Dataform para Transformación de Datos**
 6. **Configurar Looker Studio para Visualización de Datos**
 
+
 ```css
 terraform_project/
-├── main.tf
-├── outputs.tf
-├── variables.tf
-├── terraform.tfvars
-├── modules/
-│   ├── iam_orchestrator/
+.
+├── etl
+│   ├── connector
 │   │   ├── main.tf
-│   │   ├── outputs.tf
-│   │   └── variables.tf
-│   ├── cloud_scheduler/
-│   │   ├── main.tf
-│   │   ├── outputs.tf
-│   │   └── variables.tf
-│   ├── workflows/
-│   │   ├── main.tf
-│   │   ├── outputs.tf
-│   │   └── variables.tf
-│   ├── connector/
-│   │   ├── main.tf
-│   │   ├── outputs.tf
-│   │   └── variables.tf
-│   ├── bigquery/
-│   │   ├── main.tf
-│   │   ├── outputs.tf
-│   │   └── variables.tf
-│   ├── transformation/
-│   │   ├── main.tf
-│   │   ├── outputs.tf
-│   │   └── variables.tf
-│   └── looker_studio/
+│   │   ├── variable.tf
+│   │   └── app
+│   │       ├── error_handling.py
+│   │       ├── main.py
+│   │       └── requirements.txt
+│   └── transformation
 │       ├── main.tf
-│       ├── outputs.tf
+│       ├── transformation.sql
 │       └── variables.tf
+├── bigquery
+│   └──  main.tf
+│   └──  variables.tf
+├── cloud_scheduler
+│   └──  main.tf
+│   └──  variables.tf
+└── scripts
+    ├── run_etl.sh
+    └── undo_etl.sh
 ```

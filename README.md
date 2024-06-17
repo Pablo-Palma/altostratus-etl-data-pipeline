@@ -67,7 +67,7 @@ terraform_project/
 
 
 <details>
-<summary><strong>ETL</strong></summary>
+<summary><strong>Extracción, carga y transformación (ELT)</strong></summary>
 
 ### Flujo de Proceso ETL
 

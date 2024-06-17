@@ -353,6 +353,21 @@ El **modelo de hoy es más fiable** en términos generales, ya que todas las mé
 <details>
 <summary><strong>Dashboard</strong></summary>
 
+### Dashboard en Looker Studio
+
+El dashboard en Looker Studio visualiza datos de clima procesados y almacenados en la BigQuery de reporting. Está diseñado para ofrecer insights dinámicos y actualizados con una interfaz interactiva y fácil de navegar.
+
+#### Características del Dashboard:
+- **Filtros Dinámicos**: Incluye filtros de fecha y localización que permiten a los usuarios personalizar la visualización de datos desde el 06/08/2024 al 11/06/2024 y por provincias específicas.
+- **Fuentes de Datos**: Se alimenta directamente de la tabla de reporting en BigQuery, asegurando que los datos sean actuales y reflejen las últimas actualizaciones y transformaciones realizadas.
+- **Visualizaciones Implementadas**:
+  - **Tabla de Datos**: Muestra registros diarios de temperatura y precipitaciones por provincia.
+  - **Mapa de Calor**: Representa la temperatura media a nivel provincial, permitiendo una visualización geográfica de los datos.
+  - **Gráficos de Barras y Tortas**: Proporcionan análisis comparativos de la temperatura (media, máxima, mínima) y distribuciones porcentuales de las precipitaciones entre diferentes provincias.
+
+#### Beneficios del Dashboard:
+- **Interactividad**: Los usuarios pueden interactuar con los filtros para explorar diferentes aspectos de los datos climáticos, adaptando el análisis a sus necesidades específicas.
+- **Actualización en Tiempo Real**: Conectado directamente a BigQuery, el dashboard refleja cambios y actualizaciones de datos en tiempo real.
+- **Soporte Decisorio**: Facilita la toma de decisiones proporcionando un acceso rápido y fácil a insights climáticos clave, esenciales para planificación y respuesta a condiciones ambientales.
 
 </details>
-

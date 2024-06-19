@@ -62,7 +62,7 @@ bq query --use_legacy_sql=false 'SELECT * FROM `altostratus-dataretobootcaamp.st
 PPR$ curl -X 'GET' \
   'https://opendata.aemet.es/opendata/api/valores/climatologicos/diarios/datos/fechaini/2024-06-13T00%3A00%3A00UTC/fechafin/2024-06-13T23%3A59%3A59UTC/estacion/2462' \
   -H 'accept: application/json' \
-  -H "api_key: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwYWJsb3BhbG1hcHByQGdtYWlsLmNvbSIsImp0aSI6ImNkY2E4OTNkLTNlNmQtNDNmNS1iMjRmLWYxODkyN2NkN2ExZCIsImlzcyI6IkFFTUVUIiwiaWF0IjoxNzE4NjAzOTI5LCJ1c2VySWQiOiJjZGNhODkzZC0zZTZkLTQzZjUtYjI0Zi1mMTg5MjdjZDdhMWQiLCJyb2xlIjoiIn0.V7Z0B8QmZ6KVgdO5w_m5vXb7bGDkaE_GXftlnBYj-m8"
+  -H "api_key: $API_KEY"
 {
   "descripcion" : "No hay datos que satisfagan esos criterios",
   "estado" : 404

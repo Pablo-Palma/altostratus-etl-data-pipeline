@@ -63,8 +63,4 @@ PPR$ curl -X 'GET' \
   'https://opendata.aemet.es/opendata/api/valores/climatologicos/diarios/datos/fechaini/2024-06-13T00%3A00%3A00UTC/fechafin/2024-06-13T23%3A59%3A59UTC/estacion/2462' \
   -H 'accept: application/json' \
   -H "api_key: $API_KEY"
-{
-  "descripcion" : "No hay datos que satisfagan esos criterios",
-  "estado" : 404
-}%
 ```
